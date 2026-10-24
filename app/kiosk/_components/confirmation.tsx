@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 
-import { Brand } from "@/components/brand"
+import { DogSitting } from "@/components/brand"
 import { Button } from "@/components/ui/button"
 
 const RESET_AFTER_MS = 15_000
@@ -25,7 +25,7 @@ export function Confirmation({
   return (
     <main className="kiwu-light">
       <div className="flex min-h-svh flex-col items-center justify-center gap-5 bg-primary p-6 text-center text-primary-foreground">
-        <Brand name="perrete" className="h-52" />
+        <DogSitting className="h-52" />
         <p className="text-xl">Thanks, {name}!</p>
         <p className="text-sm tracking-widest uppercase opacity-80">Your order number</p>
         <p className="font-display text-9xl leading-none tabular-nums">{orderNumber}</p>

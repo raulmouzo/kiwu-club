@@ -2,7 +2,7 @@
 
 import { useActionState } from "react"
 
-import { Brand } from "@/components/brand"
+import { DogLying, Logo } from "@/components/brand"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   return (
     <main className="kiwu-light flex min-h-svh flex-col items-center justify-center gap-8 p-6">
-      <Brand name="logo" className="h-20 text-foreground" />
+      <Logo className="h-20 text-foreground" />
 
       <form
         action={formAction}
@@ -51,7 +51,7 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <Brand name="tumbadete" className="h-14 text-foreground/60" />
+      <DogLying className="h-14 text-foreground/60" />
     </main>
   )
 }

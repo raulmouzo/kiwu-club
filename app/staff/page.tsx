@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { ActionButton } from "@/components/action-button"
-import { Brand } from "@/components/brand"
+import { DogLying, Logo } from "@/components/brand"
 import { OrderCard } from "./_components/order-card"
 import { RealtimeRefresh } from "./_components/realtime-refresh"
 import { buttonVariants } from "@/components/ui/button"
@@ -26,7 +26,7 @@ export default async function StaffPage() {
       <div className="mx-auto flex max-w-7xl flex-col gap-8 p-6 lg:p-10">
         <header className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Brand name="logo" className="h-12 text-foreground" />
+            <Logo className="h-12 text-foreground" />
             <h1 className="text-xl font-semibold tracking-tight text-muted-foreground">
               Orders
             </h1>
@@ -56,7 +56,7 @@ export default async function StaffPage() {
 
                 {columnOrders.length === 0 ? (
                   <div className="flex flex-col items-center gap-3 rounded-3xl border border-dashed border-border py-10 text-sm text-muted-foreground">
-                    <Brand name="tumbadete" className="h-10 text-foreground/50" />
+                    <DogLying className="h-10 text-foreground/50" />
                     No orders
                   </div>
                 ) : (

@@ -3,7 +3,7 @@
 import { XIcon } from "@phosphor-icons/react"
 import { useId } from "react"
 
-import { Brand } from "@/components/brand"
+import { DogLying } from "@/components/brand"
 import { cartTotals, lineCents, MAX_QUANTITY, type CartLine } from "./cart"
 import { Segmented, Stepper } from "./controls"
 import { SheetTitle } from "./sheet"
@@ -76,7 +76,7 @@ export function OrderPanel({
       <div className="min-h-24 flex-1 overflow-y-auto border-y border-border py-4">
         {cart.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground">
-            <Brand name="tumbadete" className="h-16 text-foreground/70" />
+            <DogLying className="h-16 text-foreground/70" />
             <p>Nothing ordered yet</p>
           </div>
         ) : (
