@@ -2,21 +2,23 @@
 -- Kiwu Club · Menú de prueba (precios en céntimos)
 -- =========================================================
 insert into public.categories (name, sort_order) values
-  ('Coffee', 1), ('Tea', 2), ('Bakery', 3);
+  ('Hot', 1), ('Iced', 2);
 
 insert into public.products (category_id, name, description, price_cents, image_url, sort_order)
 select c.id, p.name, p.description, p.price_cents, p.image_url, p.sort_order
 from (values
-  ('Coffee', 'Espresso',   'Short and intense',                    160, '/products/espresso.webp',   1),
-  ('Coffee', 'Americano',  'Espresso topped with hot water',        200, '/products/americano.webp',  2),
-  ('Coffee', 'Flat White', 'Double espresso with velvety milk',     260, '/products/flat-white.webp', 3),
-  ('Coffee', 'Latte',      'Espresso with plenty of steamed milk',  280, '/products/latte.webp',      4),
-  ('Coffee', 'Cappuccino', 'Espresso, milk and thick foam',         280, '/products/cappuccino.webp', 5),
-  ('Coffee', 'Mocha',      'Espresso, chocolate and milk',          320, '/products/mocha.webp',      6),
-  ('Tea',    'Green Tea',  'Japanese sencha',                       220, '/products/green-tea.webp',  1),
-  ('Tea',    'Chai Latte', 'Spiced tea with milk',                  300, '/products/chai-latte.webp', 2),
-  ('Bakery', 'Croissant',  'Butter croissant, baked today',         180, '/products/croissant.webp',  1),
-  ('Bakery', 'Cookie',     'Chocolate chip with a pinch of salt',   200, '/products/cookie.webp',     2)
+  ('Hot',  'Espresso',           'Short and intense',                          160, '/products/espresso.webp',           1),
+  ('Hot',  'Americano',          'Espresso topped with hot water',             200, '/products/americano.webp',          2),
+  ('Hot',  'Cappuccino',         'Espresso, milk and thick foam',              280, '/products/cappuccino.webp',         3),
+  ('Hot',  'Latte',              'Espresso with plenty of steamed milk',       300, '/products/latte.webp',              4),
+  ('Hot',  'Mocha',              'Espresso, chocolate and whipped cream',      340, '/products/mocha.webp',              5),
+  ('Hot',  'Matcha Latte',       'Ceremonial matcha with steamed milk',        360, '/products/matcha-latte.webp',       6),
+  ('Iced', 'Iced Latte',         'Espresso poured over cold milk and ice',     320, '/products/iced-latte.webp',         1),
+  ('Iced', 'Cold Brew',          'Steeped for 18 hours, smooth and strong',    330, '/products/cold-brew.webp',          2),
+  ('Iced', 'Iced Americano',     'Espresso over ice and cold water',           240, '/products/iced-americano.webp',     3),
+  ('Iced', 'Iced Matcha Latte',  'Matcha whisked with cold milk and ice',      380, '/products/iced-matcha-latte.webp',  4),
+  ('Iced', 'Iced Caramel Latte', 'Iced latte with caramel drizzle',            350, '/products/iced-caramel-latte.webp', 5),
+  ('Iced', 'Espresso Tonic',     'Espresso over tonic water and ice',          340, '/products/espresso-tonic.webp',     6)
 ) as p (category, name, description, price_cents, image_url, sort_order)
 join public.categories c on c.name = p.category;
 
@@ -47,25 +49,26 @@ from (values
 ) as o (group_name, name, price_delta_cents, sort_order)
 join public.modifier_groups g on g.name = o.group_name;
 
+-- Qué grupos de opciones ofrece cada bebida
+--   Espresso / Espresso Tonic: sin tamaño ni leche
+--   Americano, Cold Brew: tamaño
+--   Con leche: tamaño + leche
+--   Matcha: sin "Extras" (el shot de café no encaja)
 insert into public.product_modifier_groups (product_id, modifier_group_id)
 select p.id, g.id
 from (values
-  ('Espresso',   'Extras'),
-  ('Americano',  'Size'), ('Americano',  'Extras'),
-  ('Flat White', 'Milk'), ('Flat White', 'Extras'),
-  ('Latte',      'Size'), ('Latte',      'Milk'), ('Latte',      'Extras'),
-  ('Cappuccino', 'Size'), ('Cappuccino', 'Milk'), ('Cappuccino', 'Extras'),
-  ('Mocha',      'Size'), ('Mocha',      'Milk'), ('Mocha',      'Extras'),
-  ('Green Tea',  'Size'),
-  ('Chai Latte', 'Size'), ('Chai Latte', 'Milk')
+  ('Espresso',           'Sweetener'), ('Espresso',           'Extras'),
+  ('Americano',          'Size'), ('Americano',          'Sweetener'), ('Americano',          'Extras'),
+  ('Cappuccino',         'Size'), ('Cappuccino',         'Milk'), ('Cappuccino',         'Sweetener'), ('Cappuccino',         'Extras'),
+  ('Latte',              'Size'), ('Latte',              'Milk'), ('Latte',              'Sweetener'), ('Latte',              'Extras'),
+  ('Mocha',              'Size'), ('Mocha',              'Milk'), ('Mocha',              'Sweetener'), ('Mocha',              'Extras'),
+  ('Matcha Latte',       'Size'), ('Matcha Latte',       'Milk'), ('Matcha Latte',       'Sweetener'),
+  ('Iced Latte',         'Size'), ('Iced Latte',         'Milk'), ('Iced Latte',         'Sweetener'), ('Iced Latte',         'Extras'),
+  ('Cold Brew',          'Size'), ('Cold Brew',          'Sweetener'),
+  ('Iced Americano',     'Size'), ('Iced Americano',     'Sweetener'), ('Iced Americano',     'Extras'),
+  ('Iced Matcha Latte',  'Size'), ('Iced Matcha Latte',  'Milk'), ('Iced Matcha Latte',  'Sweetener'),
+  ('Iced Caramel Latte', 'Size'), ('Iced Caramel Latte', 'Milk'), ('Iced Caramel Latte', 'Sweetener'), ('Iced Caramel Latte', 'Extras'),
+  ('Espresso Tonic',     'Sweetener'), ('Espresso Tonic',     'Extras')
 ) as l (product_name, group_name)
 join public.products p on p.name = l.product_name
 join public.modifier_groups g on g.name = l.group_name;
-
--- Sweetener en todos los cafés y tés
-insert into public.product_modifier_groups (product_id, modifier_group_id)
-select p.id, g.id
-from public.products p
-join public.categories c on c.id = p.category_id
-cross join public.modifier_groups g
-where c.name in ('Coffee', 'Tea') and g.name = 'Sweetener';

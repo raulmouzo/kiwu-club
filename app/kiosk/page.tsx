@@ -1,7 +1,10 @@
+import { Kiosk } from "@/components/kiosk/kiosk"
+import { getMenu } from "@/lib/menu"
 import { requireRole } from "@/lib/supabase/roles"
 
 export default async function KioskPage() {
   await requireRole("kiosk", "staff")
+  const menu = await getMenu()
 
-  return <main className="min-h-svh p-6">Kiosk</main>
+  return <Kiosk menu={menu} />
 }
