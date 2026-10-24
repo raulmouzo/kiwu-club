@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { DM_Sans, Geist_Mono, Lilita_One } from "next/font/google"
 
 import "./globals.css"
@@ -12,6 +13,14 @@ const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 })
+
+export const metadata: Metadata = {
+  icons: {
+    // Un solo SVG que cambia de color con prefers-color-scheme: Chrome y
+    // Safari ignoran `media` en <link rel="icon">.
+    icon: [{ url: "/brand/favicon-adaptive.svg", type: "image/svg+xml" }],
+  },
+}
 
 export default function RootLayout({
   children,
