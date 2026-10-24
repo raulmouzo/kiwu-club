@@ -1,8 +1,10 @@
 "use client"
 
+import { SignOutIcon } from "@phosphor-icons/react"
 import { MotionConfig } from "motion/react"
 import { useCallback, useState, useTransition } from "react"
 
+import { ActionButton } from "@/components/action-button"
 import { Logo } from "@/components/brand"
 import { Confirmation } from "./confirmation"
 import { Segmented } from "./controls"
@@ -12,6 +14,7 @@ import { ProductCarousel } from "./product-carousel"
 import { ProductDialog, type SelectedOption } from "./product-dialog"
 import { Sheet } from "./sheet"
 import { useCart } from "./use-cart"
+import { logout } from "@/lib/actions/auth"
 import { createOrder, type OrderType } from "@/lib/actions/orders"
 import type { Category, Product } from "@/lib/menu"
 import { cn } from "@/lib/utils"
@@ -129,11 +132,22 @@ export function Kiosk({ menu }: { menu: Category[] }) {
               <Logo
                 className="h-[clamp(2.5rem,7svh,3.5rem)] text-foreground"
               />
-              <Segmented
-                value={categoryId}
-                onChange={changeCategory}
-                options={menu.map((c) => ({ value: c.id, label: c.name }))}
-              />
+              <div className="flex items-center gap-2">
+                <Segmented
+                  value={categoryId}
+                  onChange={changeCategory}
+                  options={menu.map((c) => ({ value: c.id, label: c.name }))}
+                />
+                <ActionButton
+                  action={logout}
+                  variant="ghost"
+                  aria-label="Sign out"
+                  title="Sign out"
+                  className="size-12 rounded-full text-muted-foreground"
+                >
+                  <SignOutIcon weight="bold" className="size-5" />
+                </ActionButton>
+              </div>
             </header>
 
             {/* Remounted per category so each one slides in from its own side. */}

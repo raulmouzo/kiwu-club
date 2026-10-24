@@ -7,7 +7,7 @@ import { getRole } from "@/lib/supabase/roles"
 export default async function Page() {
   const role = await getRole()
 
-  if (role === "kiosk") redirect("/kiosk")
+  if (role === "kiosk") redirect("/welcome")
   if (role === "staff") redirect("/staff")
 
   return (
