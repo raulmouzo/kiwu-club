@@ -181,8 +181,6 @@ begin
     raise exception 'Order must have between 1 and 30 items';
   end if;
 
-  -- table number optional: kiosk has no tables
-
   -- Se validan y valoran todas las líneas antes de crear nada.
   for v_item in select * from jsonb_array_elements(p_items) loop
     v_quantity := (v_item ->> 'quantity')::int;
