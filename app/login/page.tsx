@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { login } from "./actions"
+import { login } from "@/lib/actions/auth"
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, null)
