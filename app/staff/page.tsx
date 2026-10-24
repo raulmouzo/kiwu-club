@@ -4,7 +4,7 @@ import Link from "next/link"
 import { OrderBoard } from "./_components/order-board"
 import { RealtimeRefresh } from "./_components/realtime-refresh"
 import { ActionButton } from "@/components/action-button"
-import { Brand } from "@/components/brand"
+import { Logo } from "@/components/brand"
 import { buttonVariants } from "@/components/ui/button"
 import { logout } from "@/lib/actions/auth"
 import { getActiveOrders } from "@/lib/orders"
@@ -22,7 +22,7 @@ export default async function StaffPage() {
       <div className="mx-auto flex max-w-7xl flex-col gap-8 p-6 lg:p-10">
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Brand name="logo" className="h-12 text-foreground" />
+            <Logo className="h-12 text-foreground" />
             <h1 className="text-xl font-semibold tracking-tight text-muted-foreground">
               Orders
             </h1>

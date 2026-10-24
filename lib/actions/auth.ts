@@ -2,23 +2,29 @@
 
 import { redirect } from "next/navigation"
 
+import { loginSchema, type LoginInput } from "@/lib/schemas/auth"
 import { createClient } from "@/lib/supabase/server"
 
-export type LoginState = { error: string } | null
+export type LoginResult = { error: string }
 
-export async function login(
-  _prevState: LoginState,
-  formData: FormData
-): Promise<LoginState> {
+// The browser validated the input already, but it is checked again here.
+// Wrong password and unknown email share one message on purpose, so the form
+// cannot be used to find out which accounts exist.
+export async function login(input: LoginInput): Promise<LoginResult> {
+  const parsed = loginSchema.safeParse(input)
+  if (!parsed.success) return { error: "Enter a valid email and password." }
+
   const supabase = await createClient()
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email: String(formData.get("email") ?? ""),
-    password: String(formData.get("password") ?? ""),
-  })
+  const { error } = await supabase.auth.signInWithPassword(parsed.data)
 
   if (error) {
-    return { error: "Invalid email or password" }
+    // Only reported once the credentials are right, so it reveals nothing.
+    return {
+      error:
+        error.code === "email_not_confirmed"
+          ? "Confirm your email before signing in."
+          : "Invalid email or password.",
+    }
   }
 
   redirect("/")

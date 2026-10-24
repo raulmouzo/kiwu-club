@@ -11,7 +11,7 @@ import { useState } from "react"
 import { OrderCard } from "./order-card"
 import { AnimatedCounter } from "@/components/arc/animated-counter/animated-counter"
 import Toast from "@/components/arc/toast/toast"
-import { Brand } from "@/components/brand"
+import { DogLying } from "@/components/brand"
 import type { OrderStatus } from "@/lib/actions/orders"
 import type { ActiveOrder } from "@/lib/orders"
 import { cn } from "@/lib/utils"
@@ -61,8 +61,7 @@ export function OrderBoard({ orders }: { orders: ActiveOrder[] }) {
                       exit={{ opacity: 0, transition: { duration: 0.1 } }}
                       className="flex flex-col items-center gap-3 rounded-3xl border border-dashed border-foreground/15 py-10 text-sm text-muted-foreground"
                     >
-                      <Brand
-                        name="tumbadete"
+                      <DogLying
                         className="h-10 text-foreground/50"
                       />
                       No orders

@@ -3,7 +3,7 @@
 import { MotionConfig } from "motion/react"
 import { useCallback, useState, useTransition } from "react"
 
-import { Brand } from "@/components/brand"
+import { Logo } from "@/components/brand"
 import { Confirmation } from "./confirmation"
 import { Segmented } from "./controls"
 import { OrderPanel } from "./order-panel"
@@ -126,8 +126,7 @@ export function Kiosk({ menu }: { menu: Category[] }) {
             </div>
 
             <header className="relative z-10 flex flex-wrap items-center justify-between gap-4">
-              <Brand
-                name="logo"
+              <Logo
                 className="h-[clamp(2.5rem,7svh,3.5rem)] text-foreground"
               />
               <Segmented

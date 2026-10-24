@@ -1,4 +1,4 @@
-import { Brand } from "@/components/brand"
+import { Logo } from "@/components/brand"
 
 const shimmer =
   "animate-shimmer bg-[linear-gradient(100deg,transparent_30%,rgb(255_253_248/0.7)_50%,transparent_70%)] bg-[length:200%_100%]"
@@ -13,8 +13,7 @@ export default function Loading() {
       <span className="sr-only">Loading the menu</span>
       <section className="flex min-h-0 flex-col gap-4">
         <header className="flex items-center justify-between gap-4">
-          <Brand
-            name="logo"
+          <Logo
             className="h-[clamp(2.5rem,7svh,3.5rem)] text-foreground"
           />
           <div

@@ -4,7 +4,7 @@ import { motion, type Variants } from "motion/react"
 import { useEffect } from "react"
 
 import { AnimatedCounter } from "@/components/arc/animated-counter/animated-counter"
-import { Brand } from "@/components/brand"
+import { DogSitting } from "@/components/brand"
 import { Button } from "@/components/ui/button"
 
 const RESET_AFTER_MS = 15_000
@@ -53,7 +53,7 @@ export function Confirmation({
         className="flex flex-col items-center gap-5"
       >
         <motion.div variants={jump}>
-          <Brand name="perrete" className="h-52" />
+          <DogSitting className="h-52" />
         </motion.div>
         <motion.h1 variants={rise} className="text-xl">
           Thanks, {name}!

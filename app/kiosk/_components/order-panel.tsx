@@ -8,7 +8,7 @@ import { cartTotals, lineCents, MAX_QUANTITY, type CartLine } from "./cart"
 import { Segmented, Stepper } from "./controls"
 import { Price } from "./price"
 import { SheetTitle } from "./sheet"
-import { Brand } from "@/components/brand"
+import { DogLying } from "@/components/brand"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -87,7 +87,7 @@ export function OrderPanel({
       <div className="min-h-24 flex-1 overflow-y-auto border-y border-border py-4">
         {cart.length === 0 ? (
           <div className="flex h-full animate-in flex-col items-center justify-center gap-3 text-muted-foreground duration-500 fade-in-0">
-            <Brand name="tumbadete" className="h-16 text-foreground/70" />
+            <DogLying className="h-16 text-foreground/70" />
             <p>Nothing ordered yet</p>
           </div>
         ) : (
