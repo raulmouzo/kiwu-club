@@ -44,3 +44,23 @@ export async function getActiveOrders(): Promise<ActiveOrder[]> {
 
   return data as unknown as ActiveOrder[]
 }
+
+export async function getCustomerOrders(): Promise<ActiveOrder[]> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return []
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select(
+      `id, order_number, customer_name, order_type, status, total_cents, created_at,
+       order_items (id, product_name, quantity, order_item_options (id, option_name))`
+    )
+    .eq("customer_id", user.id)
+    .order("created_at", { ascending: false })
+
+  if (error) throw error
+  return data as unknown as ActiveOrder[]
+}
