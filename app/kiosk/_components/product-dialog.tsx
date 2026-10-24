@@ -3,8 +3,8 @@
 import { XIcon } from "@phosphor-icons/react"
 import { useState } from "react"
 
-import { Stepper } from "@/components/kiosk/controls"
-import { Sheet, SheetDescription, SheetTitle } from "@/components/kiosk/sheet"
+import { Stepper } from "./controls"
+import { Sheet, SheetDescription, SheetTitle } from "./sheet"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/format"
 import type { Group, Option, Product } from "@/lib/menu"

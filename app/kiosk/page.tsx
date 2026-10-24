@@ -1,4 +1,4 @@
-import { Kiosk } from "@/components/kiosk/kiosk"
+import { Kiosk } from "./_components/kiosk"
 import { getMenu } from "@/lib/menu"
 import { requireRole } from "@/lib/supabase/roles"
 

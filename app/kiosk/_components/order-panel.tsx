@@ -1,13 +1,12 @@
 "use client"
 
-
 import { XIcon } from "@phosphor-icons/react"
 import { useId } from "react"
 
 import { Brand } from "@/components/brand"
-import { lineCents, MAX_QUANTITY, type CartLine } from "@/components/kiosk/cart"
-import { Segmented, Stepper } from "@/components/kiosk/controls"
-import { SheetTitle } from "@/components/kiosk/sheet"
+import { cartTotals, lineCents, MAX_QUANTITY, type CartLine } from "./cart"
+import { Segmented, Stepper } from "./controls"
+import { SheetTitle } from "./sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -41,8 +40,7 @@ export function OrderPanel({
   onClose,
 }: Props) {
   const nameId = useId()
-  const totalCents = cart.reduce((sum, line) => sum + lineCents(line), 0)
-  const itemCount = cart.reduce((sum, line) => sum + line.quantity, 0)
+  const { itemCount, totalCents } = cartTotals(cart)
   const canOrder = cart.length > 0 && name.trim().length > 0 && !pending
   const Heading = onClose ? SheetTitle : "h2"
 

@@ -1,5 +1,5 @@
 import { ActionButton } from "@/components/action-button"
-import { Elapsed } from "@/components/staff/elapsed"
+import { Elapsed } from "./elapsed"
 import { updateOrderStatus, type OrderStatus } from "@/lib/actions/orders"
 import { formatPrice } from "@/lib/format"
 import type { ActiveOrder } from "@/lib/orders"
