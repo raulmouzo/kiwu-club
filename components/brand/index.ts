@@ -1,4 +1,5 @@
 export { Background } from "./background"
+export { CoffeeCup } from "./coffee-cup"
 export { DogLying } from "./dog-lying"
 export { DogSitting } from "./dog-sitting"
 export { Logo } from "./logo"
