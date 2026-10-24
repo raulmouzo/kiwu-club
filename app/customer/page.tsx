@@ -5,14 +5,14 @@ import { RealtimeRefresh } from "@/app/staff/_components/realtime-refresh"
 import { Logo } from "@/components/brand"
 import { ActionButton } from "@/components/action-button"
 import { logout } from "@/lib/actions/auth"
-import { getActiveOrders } from "@/lib/orders"
+import { getCustomerOrders } from "@/lib/orders"
 import { requireRole } from "@/lib/supabase/roles"
 
 export const metadata: Metadata = { title: "My order" }
 
 export default async function CustomerPage() {
   await requireRole("customer")
-  const orders = await getActiveOrders()
+  const orders = await getCustomerOrders()
 
   return (
     <main className="min-h-svh">
