@@ -92,7 +92,7 @@ export function OrderBoard({ orders }: { orders: ActiveOrder[] }) {
         </div>
       </LayoutGroup>
 
-      <div className="pointer-events-none fixed inset-x-4 bottom-4 z-40 flex justify-end [&>*]:pointer-events-auto">
+      <div className="pointer-events-none fixed inset-x-4 bottom-4 z-40 flex justify-end *:pointer-events-auto">
         <Toast
           open={toast?.open ?? false}
           onOpenChange={(open) =>
