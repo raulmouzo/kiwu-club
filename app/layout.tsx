@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   title: { default: "Kiwu Club", template: "%s · Kiwu Club" },
   description: "Order at the counter and follow every drink from the bar.",
   robots: { index: false, follow: false },
+  icons: {
+    // Un solo SVG que cambia de color con prefers-color-scheme: Chrome y
+    // Safari ignoran `media` en <link rel="icon">.
+    icon: [{ url: "/brand/favicon-adaptive.svg", type: "image/svg+xml" }],
+  },
 }
 
 export const viewport: Viewport = {
