@@ -6,3 +6,6 @@
 .env.keys
 .env.local
 .env.*.local
+
+# Local-only accounts (contain passwords)
+seed.local.sql
