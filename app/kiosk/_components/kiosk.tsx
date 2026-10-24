@@ -19,7 +19,13 @@ import { createOrder, type OrderType } from "@/lib/actions/orders"
 import type { Category, Product } from "@/lib/menu"
 import { cn } from "@/lib/utils"
 
-export function Kiosk({ menu }: { menu: Category[] }) {
+export function Kiosk({
+  menu,
+  canSignOut,
+}: {
+  menu: Category[]
+  canSignOut: boolean
+}) {
   const [categoryId, setCategoryId] = useState(menu[0]?.id)
   // Which side the next category slides in from: the one it sits on in the tabs.
   const [from, setFrom] = useState<"left" | "right">("right")
@@ -138,15 +144,17 @@ export function Kiosk({ menu }: { menu: Category[] }) {
                   onChange={changeCategory}
                   options={menu.map((c) => ({ value: c.id, label: c.name }))}
                 />
-                <ActionButton
-                  action={logout}
-                  variant="ghost"
-                  aria-label="Sign out"
-                  title="Sign out"
-                  className="size-12 rounded-full text-muted-foreground"
-                >
-                  <SignOutIcon weight="bold" className="size-5" />
-                </ActionButton>
+                {canSignOut && (
+                  <ActionButton
+                    action={logout}
+                    variant="ghost"
+                    aria-label="Sign out"
+                    title="Sign out"
+                    className="size-12 rounded-full text-muted-foreground"
+                  >
+                    <SignOutIcon weight="bold" className="size-5" />
+                  </ActionButton>
+                )}
               </div>
             </header>
 
