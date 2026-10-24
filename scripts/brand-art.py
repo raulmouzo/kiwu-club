@@ -117,6 +117,8 @@ def component(src, dst, name, label):
     svg = Path(src).read_text()
     view_box = re.search(r'viewBox="([^"]+)"', svg).group(1)
     d = re.search(r'\sd="([^"]*)"', svg).group(1)
+    # Traced drawings (scripts/trace-png.py) have holes that need even-odd.
+    rule = ' fillRule="evenodd"' if 'fill-rule="evenodd"' in svg else ""
     # A named drawing is announced to screen readers; a decorative one is hidden.
     a11y = f'role="img" aria-label="{label}"' if label else 'aria-hidden="true"'
     Path(dst).write_text(
@@ -126,7 +128,7 @@ def component(src, dst, name, label):
         f"export function {name}(props: SVGProps<SVGSVGElement>) {{\n"
         f"  return (\n"
         f'    <svg viewBox="{view_box}" fill="currentColor" {a11y} {{...props}}>\n'
-        f'      <path d="{d}" />\n'
+        f'      <path{rule} d="{d}" />\n'
         f"    </svg>\n"
         f"  )\n"
         f"}}\n"
