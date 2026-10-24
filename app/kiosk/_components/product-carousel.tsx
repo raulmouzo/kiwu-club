@@ -81,7 +81,7 @@ export function ProductCarousel({
       <div
         ref={scroller}
         onScroll={onScroll}
-        className="relative flex h-full snap-x snap-mandatory [scrollbar-width:none] items-center gap-5 overflow-x-auto overscroll-x-contain [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)] px-[calc(50%-var(--card-size)*0.35)] pt-[12cqh] [--card-size:clamp(11rem,calc(72cqh-2rem),22rem)]"
+        className="relative flex h-full snap-x snap-mandatory [scrollbar-width:none] items-center gap-5 overflow-x-auto overscroll-x-contain [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)] px-[calc(50%-var(--card-size)*0.35)] pt-[12cqh] [--card-size:clamp(9rem,calc(54cqh-1.5rem),22rem)]"
       >
         {products.map((product, i) => (
           <ProductCard
