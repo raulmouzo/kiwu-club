@@ -1,14 +1,14 @@
 "use client"
 
 import { SignOutIcon } from "@phosphor-icons/react"
-import { Flame, Leaf, Milk, Snowflake, Sparkles } from "lucide-react"
+import { Flame, Leaf, Milk, Snowflake } from "lucide-react"
 import { MotionConfig } from "motion/react"
-import { useCallback, useEffect, useState, useTransition } from "react"
+import { useCallback, useState, useTransition } from "react"
 
 import { ActionButton } from "@/components/action-button"
 import { Logo } from "@/components/brand"
 import { AttractScreen } from "./attract-screen"
-import { cartTotals, type CartLine } from "./cart"
+import { cartTotals } from "./cart"
 import { Confirmation } from "./confirmation"
 import { Segmented } from "./controls"
 import { OrderPanel } from "./order-panel"
@@ -22,8 +22,6 @@ import { logout } from "@/lib/actions/auth"
 import { createOrder, type OrderType } from "@/lib/actions/orders"
 import type { Category, Product } from "@/lib/menu"
 import { cn } from "@/lib/utils"
-
-const USUAL_ORDER_KEY = "kiwu_usual_order"
 
 type DietaryFilter = "all" | "vegan" | "lactose_free" | "cold" | "hot"
 
@@ -65,31 +63,6 @@ export function Kiosk({
     name: string
   } | null>(null)
   const [pending, startTransition] = useTransition()
-  const [usualOrder, setUsualOrder] = useState<{
-    name: string
-    lines: CartLine[]
-  } | null>(null)
-
-  // Load "Repeat the usual" from localStorage
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(USUAL_ORDER_KEY)
-      if (stored) {
-        setUsualOrder(JSON.parse(stored))
-      }
-    } catch {
-      // Ignore
-    }
-  }, [])
-
-  function repeatUsualOrder() {
-    if (!usualOrder) return
-    cart.clear()
-    setName(usualOrder.name)
-    for (const line of usualOrder.lines) {
-      cart.add(line.product, line.options, line.quantity)
-    }
-  }
 
   const finish = useCallback(() => setPlaced(null), [])
 
@@ -168,17 +141,6 @@ export function Kiosk({
         return
       }
 
-      // Save for "Repeat the usual"
-      try {
-        localStorage.setItem(
-          USUAL_ORDER_KEY,
-          JSON.stringify({ name: name.trim(), lines: cart.lines })
-        )
-        setUsualOrder({ name: name.trim(), lines: cart.lines })
-      } catch {
-        // Ignore
-      }
-
       setPlaced({ orderNumber: result.orderNumber, name: name.trim() })
       setOrderSheet(false)
       cart.clear()
@@ -219,8 +181,6 @@ export function Kiosk({
     discountCents,
     onDiscountCentsChange: setDiscountCents,
     estimatedWaitMinutes: 4,
-    hasUsualOrder: Boolean(usualOrder),
-    onRepeatUsual: repeatUsualOrder,
     error,
     pending,
     onStartPayment: startPaymentFlow,
@@ -253,7 +213,7 @@ export function Kiosk({
             >
               <p
                 key={title}
-                className="absolute top-[30%] left-0 -translate-y-1/2 animate-in text-[clamp(7rem,26svh,12rem)] leading-none font-medium tracking-tighter whitespace-nowrap text-foreground/[0.07] uppercase duration-500 ease-out-soft fade-in-0 select-none slide-in-from-bottom-8"
+                className="absolute top-[30%] left-0 -translate-y-1/2 animate-in text-[clamp(7rem,26svh,12rem)] leading-none font-medium tracking-tighter whitespace-nowrap text-foreground/[0.07] uppercase duration-500 ease-out-soft select-none fade-in-0 slide-in-from-bottom-8"
               >
                 {title}
               </p>
@@ -296,7 +256,7 @@ export function Kiosk({
                     className={cn(
                       "inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-medium transition-all active:scale-95",
                       dietaryFilter === f.id
-                        ? "border border-foreground/30 bg-foreground font-semibold text-background shadow-sm"
+                        ? "border border-foreground/30 bg-foreground text-background font-semibold shadow-sm"
                         : "border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                   >
