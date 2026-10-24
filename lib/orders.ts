@@ -1,0 +1,37 @@
+import type { OrderStatus } from "@/lib/actions/orders"
+import { createClient } from "@/lib/supabase/server"
+
+export type ActiveOrder = {
+  id: string
+  order_number: number
+  customer_name: string
+  order_type: "dine_in" | "takeaway"
+  status: OrderStatus
+  total_cents: number
+  created_at: string
+  order_items: {
+    id: number
+    product_name: string
+    quantity: number
+    order_item_options: { id: number; option_name: string }[]
+  }[]
+}
+
+// Orders still being worked on, oldest first.
+export async function getActiveOrders(): Promise<ActiveOrder[]> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select(
+      `id, order_number, customer_name, order_type, status, total_cents, created_at,
+       order_items (id, product_name, quantity, order_item_options (id, option_name))`
+    )
+    .in("status", ["pending", "preparing", "ready"])
+    .order("created_at", { ascending: true })
+    .order("id", { referencedTable: "order_items", ascending: true })
+
+  if (error) throw error
+
+  return data as unknown as ActiveOrder[]
+}
