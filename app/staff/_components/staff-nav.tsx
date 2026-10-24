@@ -50,13 +50,6 @@ export function StaffNav() {
 
       <div className="flex items-center gap-2">
         <Link
-          href="/ready"
-          target="_blank"
-          className={buttonVariants({ variant: "ghost", size: "sm" })}
-        >
-          TV Board
-        </Link>
-        <Link
           href="/kiosk"
           className={buttonVariants({ variant: "ghost", size: "sm" })}
         >
