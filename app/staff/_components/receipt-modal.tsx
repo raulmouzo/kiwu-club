@@ -3,7 +3,7 @@
 import { Printer, X } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import { formatPrice } from "@/lib/format"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 
 type ReceiptItem = {
   name: string
@@ -161,19 +161,17 @@ export function ReceiptModal({
             >
               Close
             </Button>
-            <Button
-              asChild
-              variant="secondary"
-              className="flex-1 rounded-xl font-semibold"
+            <a
+              href={`/status/${data.orderNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonVariants({
+                variant: "secondary",
+                className: "flex-1 rounded-xl font-semibold",
+              })}
             >
-              <a
-                href={`/status/${data.orderNumber}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Live Tracker
-              </a>
-            </Button>
+              Live Tracker
+            </a>
             <Button
               onClick={handlePrint}
               className="flex-1 rounded-xl gap-2 font-semibold shadow-lifted"
