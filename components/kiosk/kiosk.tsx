@@ -13,6 +13,7 @@ import { Sheet } from "@/components/kiosk/sheet"
 import { Button } from "@/components/ui/button"
 import { createOrder, type OrderType } from "@/lib/actions/orders"
 import type { Category, Product } from "@/lib/menu"
+import { cn } from "@/lib/utils"
 
 type Confirmation = { orderNumber: number; name: string }
 
@@ -31,6 +32,7 @@ export function Kiosk({ menu }: { menu: Category[] }) {
   const [pending, startTransition] = useTransition()
 
   const category = menu.find((c) => c.id === categoryId)
+  const categoryIndex = menu.findIndex((c) => c.id === categoryId)
   // Nothing is highlighted until the guest taps a drink.
   const activeId = category?.products.some((p) => p.id === activeProductId)
     ? activeProductId
@@ -158,7 +160,14 @@ export function Kiosk({ menu }: { menu: Category[] }) {
             />
           </header>
 
-          <div key={categoryId} className="flex min-h-0 flex-1 flex-col">
+          {/* Remounted per category so each one slides in from its own side. */}
+          <div
+            key={categoryId}
+            className={cn(
+              "flex min-h-0 flex-1 flex-col duration-300 animate-in fade-in-0",
+              categoryIndex > 0 ? "slide-in-from-right-8" : "slide-in-from-left-8"
+            )}
+          >
             <ProductCarousel
               products={category?.products ?? []}
               activeId={activeId}

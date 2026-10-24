@@ -23,7 +23,7 @@ export function OrderSummaryBar({
         onClick={onOpen}
         className="pointer-events-auto flex w-full max-w-xl touch-manipulation items-center justify-between gap-4 rounded-full bg-card/85 py-2 pr-2 pl-6 text-left shadow-[0_8px_32px_rgb(48_40_32/0.22)] ring-1 ring-foreground/8 backdrop-blur-xl"
       >
-        <span>
+        <span key={`${itemCount}-${totalCents}`} className="animate-in duration-300 zoom-in-95 fade-in-0">
           <span className={cn("block font-semibold", empty && "text-muted-foreground")}>
             {empty ? "Nothing ordered yet" : `${itemCount} ${itemCount === 1 ? "item" : "items"}`}
           </span>
