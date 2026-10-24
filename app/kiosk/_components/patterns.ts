@@ -14,16 +14,28 @@ type Tile = {
 const TILES: Tile[] = [
   // wide waves
   {
-    w: 240, h: 150, stroke: 64, alpha: 0.13,
+    w: 240,
+    h: 150,
+    stroke: 64,
+    alpha: 0.13,
     body: "<path d='M-240 40 C-160 -10,-80 90,0 40'/><path d='M0 40 C80 -10,160 90,240 40'/><path d='M240 40 C320 -10,400 90,480 40'/>",
   },
   // wide diagonal stripes
   {
-    w: 140, h: 140, stroke: 44, alpha: 0.12,
+    w: 140,
+    h: 140,
+    stroke: 44,
+    alpha: 0.12,
     body: "<path d='M-35 175 L175 -35'/><path d='M-35 35 L35 -35'/><path d='M105 175 L175 105'/>",
   },
   // big arcs
-  { w: 160, h: 132, stroke: 38, alpha: 0.12, body: "<path d='M10 112 A70 70 0 0 1 150 112'/>" },
+  {
+    w: 160,
+    h: 132,
+    stroke: 38,
+    alpha: 0.12,
+    body: "<path d='M10 112 A70 70 0 0 1 150 112'/>",
+  },
 ]
 
 // Brand family: caramel, a livelier sage, a coffee brown and a deeper akaroa. The
@@ -56,7 +68,13 @@ function mulberry32(seed: number) {
   }
 }
 
-export type Pattern = { image: string; width: number; height: number; angle: number; color: string }
+export type Pattern = {
+  image: string
+  width: number
+  height: number
+  angle: number
+  color: string
+}
 
 export function patternFor(seed: number, name = ""): Pattern {
   // 5 is coprime with the tile count, so consecutive ids never repeat a type.

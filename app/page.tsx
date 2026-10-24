@@ -11,7 +11,7 @@ export default async function Page() {
   if (role === "staff") redirect("/staff")
 
   return (
-    <main className="kiwu-light flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
+    <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
       <p>This account has no access yet. Ask an admin to assign a role.</p>
       <ActionButton action={logout} variant="outline">
         Sign out

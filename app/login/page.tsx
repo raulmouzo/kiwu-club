@@ -12,7 +12,7 @@ export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, null)
 
   return (
-    <main className="kiwu-light flex min-h-svh flex-col items-center justify-center gap-8 p-6">
+    <main className="flex min-h-svh flex-col items-center justify-center gap-8 p-6">
       <Brand name="logo" className="h-20 text-foreground" />
 
       <form
@@ -46,7 +46,12 @@ export default function LoginPage() {
             {state.error}
           </p>
         )}
-        <Button type="submit" size="lg" className="h-12 text-base" disabled={pending}>
+        <Button
+          type="submit"
+          size="lg"
+          className="h-12 text-base"
+          disabled={pending}
+        >
           {pending ? "Signing in…" : "Sign in"}
         </Button>
       </form>

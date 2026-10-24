@@ -2,6 +2,7 @@
 
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react"
 
+import { AnimatedCounter } from "@/components/arc/animated-counter/animated-counter"
 import { cn } from "@/lib/utils"
 
 // iOS-style segmented control: a pill slides to the chosen option.
@@ -18,7 +19,10 @@ function Segmented<T extends string | number>({
   className?: string
   fill?: boolean
 }) {
-  const index = Math.max(0, options.findIndex((option) => option.value === value))
+  const index = Math.max(
+    0,
+    options.findIndex((option) => option.value === value)
+  )
 
   return (
     <div
@@ -31,7 +35,7 @@ function Segmented<T extends string | number>({
     >
       <span
         aria-hidden
-        className="absolute inset-y-1 left-1 rounded-full bg-card shadow-[0_1px_3px_rgb(48_40_32/0.15)] transition-transform duration-300 ease-in-out motion-reduce:transition-none"
+        className="absolute inset-y-1 left-1 rounded-full bg-card shadow-[0_1px_3px_rgb(48_40_32/0.15)] transition-transform duration-500 ease-out-soft motion-reduce:transition-none"
         style={{
           width: `calc((100% - 0.5rem) / ${options.length})`,
           transform: `translateX(${index * 100}%)`,
@@ -47,7 +51,7 @@ function Segmented<T extends string | number>({
             aria-checked={active}
             onClick={() => onChange(option.value)}
             className={cn(
-              "relative z-10 h-11 touch-manipulation rounded-full px-7 text-[15px] font-medium transition-colors duration-300",
+              "relative z-10 h-11 touch-manipulation rounded-full px-7 text-[15px] font-medium transition-[color,scale] duration-300 active:scale-95",
               active ? "text-foreground" : "text-muted-foreground"
             )}
           >
@@ -83,14 +87,14 @@ function Stepper({
         disabled={value <= min}
         onClick={() => onChange(value - 1)}
         className={cn(
-          "grid touch-manipulation place-items-center rounded-full bg-foreground/10 transition-opacity disabled:opacity-40",
+          "grid touch-manipulation place-items-center rounded-full bg-foreground/10 transition-[opacity,scale] duration-200 active:scale-90 disabled:opacity-40",
           size
         )}
       >
         <MinusIcon weight="bold" />
       </button>
-      <span className="w-5 text-center text-lg font-medium tabular-nums">
-        {value}
+      <span className="counter-inherit grid w-6 justify-center text-lg font-medium">
+        <AnimatedCounter value={value} />
       </span>
       <button
         type="button"
@@ -98,7 +102,7 @@ function Stepper({
         disabled={value >= max}
         onClick={() => onChange(value + 1)}
         className={cn(
-          "grid touch-manipulation place-items-center rounded-full bg-foreground text-background transition-opacity disabled:opacity-40",
+          "grid touch-manipulation place-items-center rounded-full bg-foreground text-background transition-[opacity,scale] duration-200 active:scale-90 disabled:opacity-40",
           size
         )}
       >

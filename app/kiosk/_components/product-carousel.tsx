@@ -1,158 +1,179 @@
 "use client"
 
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 
 import { ProductCard } from "./product-card"
-import { CLOSE_MS, layoutRow, wait } from "./row-layout"
 import type { Product } from "@/lib/menu"
 import { cn } from "@/lib/utils"
 
 type Props = {
   products: Product[]
-  /** The drink the guest tapped, if any. Nothing is selected at first. */
+  /** The drink in the middle of the row. */
   activeId: number | undefined
   onActivate: (id: number) => void
   onOpen: (product: Product) => void
 }
 
-// A row of cards that starts at the left. Tapping a drink moves the row so the
-// card ends up in the middle, then opens it. --card-size comes from the height
-// the row really has (cqh), so it fits any screen.
-export function ProductCarousel({ products, activeId, onActivate, onOpen }: Props) {
+// A row of drinks that snaps one card into the middle. Swiping is native
+// scrolling, so it follows the finger. Every frame each card gets --focus
+// (how near the middle it is), which drives its growth and glass live; the
+// active drink only changes once the row comes to rest, so a fast swipe does
+// not restart the ring, pattern and title on every card it passes. Cards
+// never change size in the layout. --card-size comes from the height the row
+// really has (cqh).
+export function ProductCarousel({
+  products,
+  activeId,
+  onActivate,
+  onOpen,
+}: Props) {
   const scroller = useRef<HTMLDivElement>(null)
-  const probe = useRef<HTMLSpanElement>(null)
-  const placed = useRef(false)
-  const run = useRef(0)
-  const [edges, setEdges] = useState<Edges>({ left: false, right: false })
+  const frame = useRef(0)
+  const settle = useRef<ReturnType<typeof setTimeout>>(undefined)
+  // The card the row is heading to, so quick arrow taps add up.
+  const target = useRef<number | null>(null)
+  const index = products.findIndex((product) => product.id === activeId)
 
-  // `openId` lags behind `activeId` on purpose: the two animations never
-  // overlap. The row moves first and the card opens, with its background, only
-  // once it has stopped.
-  const [openId, setOpenId] = useState<number>()
-  const open = openId === activeId ? activeId : undefined
-
+  // Opening on a drink chosen earlier puts it in the middle straight away.
   useLayoutEffect(() => {
-    const current = ++run.current
-    const smooth = placed.current
-    placed.current = true
-
-    const moved = layoutRow(scroller.current, probe.current, activeId !== undefined, smooth)
-    Promise.all([moved, wait(smooth ? CLOSE_MS : 0)]).then(() => {
-      if (run.current === current) setOpenId(activeId)
-    })
-  }, [activeId, products])
+    centre(scroller.current, index, false)
+    // Only on mount: later changes come from the row itself.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
-    const relayout = () => layoutRow(scroller.current, probe.current, activeId !== undefined, false)
-    window.addEventListener("resize", relayout)
-    return () => window.removeEventListener("resize", relayout)
-  }, [activeId])
+    const row = scroller.current
+    if (!row) return
+    const resize = new ResizeObserver(() => setFocus(row))
+    resize.observe(row)
+    return () => {
+      resize.disconnect()
+      cancelAnimationFrame(frame.current)
+      clearTimeout(settle.current)
+    }
+  }, [])
 
-  const updateEdges = () => {
-    const el = scroller.current
-    if (el) setEdges((current) => nextEdges(current, el))
+  function onScroll() {
+    cancelAnimationFrame(frame.current)
+    frame.current = requestAnimationFrame(() => setFocus(scroller.current))
+    clearTimeout(settle.current)
+    settle.current = setTimeout(() => {
+      target.current = null
+      const id = products[nearestToMiddle(scroller.current)]?.id
+      if (id !== undefined && id !== activeId) onActivate(id)
+    }, 120)
   }
 
-  useEffect(() => {
-    const el = scroller.current
-    if (!el) return
-    const observer = new ResizeObserver(() => setEdges((current) => nextEdges(current, el)))
-    observer.observe(el)
-    for (const child of el.children) observer.observe(child)
-    return () => observer.disconnect()
-  }, [products])
+  function go(at: number) {
+    target.current = Math.max(0, Math.min(products.length - 1, at))
+    centre(scroller.current, target.current, true)
+  }
 
-  // The arrows step through the drinks; with nothing selected, "next" picks the first.
-  const index = products.findIndex((product) => product.id === activeId)
-  const step = (delta: 1 | -1) => {
-    const next = index === -1 ? products[0] : products[index + delta]
-    if (next) onActivate(next.id)
+  // A tap on the middle card opens it; a tap on any other brings it to the middle.
+  function tap(product: Product, at: number) {
+    if (product.id !== activeId) go(at)
+    else if (product.is_available) onOpen(product)
   }
 
   return (
-    <div className="relative -mx-6 min-h-0 flex-1 [container-type:size] lg:-mx-8">
+    <div className="[container-type:size] relative -mx-6 min-h-0 flex-1 lg:-mx-8">
       <div
         ref={scroller}
-        onScroll={updateEdges}
-        className="relative flex h-full items-center gap-5 overflow-x-auto px-6 pt-[calc(var(--card-size)*0.42)] pb-6 [--card-size:clamp(11rem,calc(50cqh-0.75rem),24rem)] [scrollbar-width:none] lg:px-8"
+        onScroll={onScroll}
+        className="relative flex h-full snap-x snap-mandatory [scrollbar-width:none] items-center gap-5 overflow-x-auto overscroll-x-contain [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)] px-[calc(50%-var(--card-size)*0.35)] pt-[12cqh] [--card-size:clamp(11rem,calc(72cqh-2rem),22rem)]"
       >
-        {/* Measures --card-size in pixels. */}
-        <span ref={probe} aria-hidden className="pointer-events-none absolute h-[var(--card-size)] w-px" />
-        {products.map((product) => (
+        {products.map((product, i) => (
           <ProductCard
             key={product.id}
             product={product}
-            selected={product.id === activeId}
-            open={product.id === open}
-            onSelect={onActivate}
-            onOpen={onOpen}
+            active={product.id === activeId}
+            onTap={() => tap(product, i)}
           />
         ))}
       </div>
 
-      <Arrow side="left" fade={edges.left} visible={index > 0} onClick={() => step(-1)} />
+      <Arrow
+        side="left"
+        visible={index > 0}
+        onClick={() => go((target.current ?? index) - 1)}
+      />
       <Arrow
         side="right"
-        fade={edges.right}
-        visible={index === -1 ? edges.right : index < products.length - 1}
-        onClick={() => step(1)}
+        visible={index < products.length - 1}
+        onClick={() => go((target.current ?? index) + 1)}
       />
     </div>
   )
 }
 
-type Edges = { left: boolean; right: boolean }
+const cardsIn = (row: HTMLElement) => [
+  ...row.querySelectorAll<HTMLElement>("[data-card]"),
+]
 
-// Which sides of the row still have cards out of view. Returns `current`
-// unchanged when nothing moved, so React skips the re-render.
-function nextEdges(current: Edges, el: HTMLElement): Edges {
-  const left = el.scrollLeft > 8
-  const right = el.scrollLeft < el.scrollWidth - el.clientWidth - 8
-  return current.left === left && current.right === right ? current : { left, right }
+// Layout offsets, not screen boxes, so the on-screen growth does not count.
+function nearestToMiddle(row: HTMLElement | null) {
+  if (!row) return -1
+  const middle = row.scrollLeft + row.clientWidth / 2
+  let nearest = -1
+  let best = Infinity
+  cardsIn(row).forEach((card, i) => {
+    const distance = Math.abs(card.offsetLeft + card.offsetWidth / 2 - middle)
+    if (distance < best) {
+      best = distance
+      nearest = i
+    }
+  })
+  return nearest
 }
 
-// A fade marks a side with more cards out of view; the arrow steps to the
-// previous or next drink.
+// 1 in the middle, down to 0 a card's width away. Layout offsets, so the
+// on-screen growth it drives does not feed back into it.
+function setFocus(row: HTMLElement | null) {
+  if (!row) return
+  const middle = row.scrollLeft + row.clientWidth / 2
+  for (const card of cardsIn(row)) {
+    const distance = Math.abs(card.offsetLeft + card.offsetWidth / 2 - middle)
+    const value = Math.max(0, 1 - distance / card.offsetWidth)
+    card.style.setProperty("--focus", value.toFixed(3))
+  }
+}
+
+function centre(row: HTMLElement | null, at: number, smooth: boolean) {
+  const card = row && cardsIn(row)[at]
+  if (!row || !card) return
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches
+  row.scrollTo({
+    left: card.offsetLeft + card.offsetWidth / 2 - row.clientWidth / 2,
+    behavior: smooth && !reduce ? "smooth" : "instant",
+  })
+}
+
 function Arrow({
   side,
-  fade,
   visible,
   onClick,
 }: {
   side: "left" | "right"
-  fade: boolean
   visible: boolean
   onClick: () => void
 }) {
   const Icon = side === "left" ? CaretLeftIcon : CaretRightIcon
 
   return (
-    <>
-      <div
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute inset-y-0 z-10 w-24 transition-opacity duration-300",
-          side === "left"
-            ? "left-0 bg-gradient-to-r from-background to-transparent"
-            : "right-0 bg-gradient-to-l from-background to-transparent",
-          fade ? "opacity-100" : "opacity-0"
-        )}
-      />
-      <button
-        type="button"
-        tabIndex={visible ? 0 : -1}
-        aria-hidden={!visible}
-        aria-label={side === "left" ? "Previous drink" : "Next drink"}
-        onClick={onClick}
-        className={cn(
-          "absolute top-1/2 z-20 grid size-12 -translate-y-1/2 touch-manipulation place-items-center rounded-full bg-card shadow-[0_4px_16px_rgb(48_40_32/0.18)] transition-[opacity,transform] duration-300 active:scale-95",
-          side === "left" ? "left-4 lg:left-6" : "right-4 lg:right-6",
-          visible ? "opacity-100" : "pointer-events-none opacity-0"
-        )}
-      >
-        <Icon weight="bold" className="size-5" />
-      </button>
-    </>
+    <button
+      type="button"
+      tabIndex={visible ? 0 : -1}
+      aria-hidden={!visible}
+      aria-label={side === "left" ? "Previous drink" : "Next drink"}
+      onClick={onClick}
+      className={cn(
+        "absolute top-[calc(50%+4cqh)] z-20 grid size-12 -translate-y-1/2 touch-manipulation place-items-center rounded-full bg-card shadow-[0_4px_16px_rgb(48_40_32/0.18)] transition-[opacity,scale] duration-300 active:scale-90",
+        side === "left" ? "left-4 lg:left-6" : "right-4 lg:right-6",
+        visible ? "opacity-100" : "pointer-events-none opacity-0"
+      )}
+    >
+      <Icon weight="bold" className="size-5" />
+    </button>
   )
 }

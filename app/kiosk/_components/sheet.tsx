@@ -21,10 +21,10 @@ function Sheet({
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm duration-200 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
+        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-foreground/30 backdrop-blur-sm duration-300 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
         <DialogPrimitive.Popup
           className={cn(
-            "kiwu-light fixed z-50 flex flex-col outline-none duration-300 data-open:animate-in data-open:fade-in-0 data-open:slide-in-from-bottom-8 data-closed:animate-out data-closed:fade-out-0 data-closed:slide-out-to-bottom-8",
+            "fixed z-50 flex flex-col ease-out-soft outline-none data-open:animate-in data-open:duration-500 data-open:fade-in-0 data-open:slide-in-from-bottom-8 data-open:zoom-in-[0.97] data-closed:animate-out data-closed:duration-200 data-closed:fade-out-0 data-closed:slide-out-to-bottom-4",
             className
           )}
         >

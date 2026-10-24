@@ -12,11 +12,19 @@ export function useCart() {
   const [lines, setLines] = useState<CartLine[]>([])
 
   function add(product: Product, options: SelectedOption[], quantity: number) {
-    const key = `${product.id}:${options.map((option) => option.id).sort((a, b) => a - b).join(",")}`
+    const key = `${product.id}:${options
+      .map((option) => option.id)
+      .sort((a, b) => a - b)
+      .join(",")}`
     setLines((current) =>
       current.some((line) => line.key === key)
         ? current.map((line) =>
-            line.key === key ? { ...line, quantity: Math.min(MAX_QUANTITY, line.quantity + quantity) } : line
+            line.key === key
+              ? {
+                  ...line,
+                  quantity: Math.min(MAX_QUANTITY, line.quantity + quantity),
+                }
+              : line
           )
         : [...current, { key, product, options, quantity }]
     )
@@ -27,9 +35,17 @@ export function useCart() {
     setLines((current) =>
       quantity < 1
         ? current.filter((line) => line.key !== key)
-        : current.map((line) => (line.key === key ? { ...line, quantity } : line))
+        : current.map((line) =>
+            line.key === key ? { ...line, quantity } : line
+          )
     )
   }
 
-  return { lines, add, setQuantity, clear: () => setLines([]), ...cartTotals(lines) }
+  return {
+    lines,
+    add,
+    setQuantity,
+    clear: () => setLines([]),
+    ...cartTotals(lines),
+  }
 }

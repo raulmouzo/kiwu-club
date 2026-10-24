@@ -4,6 +4,7 @@ import { XIcon } from "@phosphor-icons/react"
 import { useState } from "react"
 
 import { Stepper } from "./controls"
+import { Price } from "./price"
 import { Sheet, SheetDescription, SheetTitle } from "./sheet"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/format"
@@ -23,10 +24,15 @@ export function ProductDialog({ product, onClose, onAdd }: Props) {
     <Sheet
       open={product !== null}
       onOpenChange={(open) => !open && onClose()}
-      className="top-1/2 left-1/2 max-h-[90svh] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-3xl bg-card p-6 shadow-xl"
+      className="top-1/2 left-1/2 max-h-[90svh] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-3xl bg-card p-6 shadow-lifted"
     >
       {product && (
-        <ProductForm key={product.id} product={product} onAdd={onAdd} onClose={onClose} />
+        <ProductForm
+          key={product.id}
+          product={product}
+          onAdd={onAdd}
+          onClose={onClose}
+        />
       )}
     </Sheet>
   )
@@ -37,7 +43,11 @@ export function ProductDialog({ product, onClose, onAdd }: Props) {
 function initialSelection(product: Product) {
   const selection: Record<number, number[]> = {}
   for (const group of product.groups) {
-    if (group.is_required && group.selection_type === "single" && group.options[0]) {
+    if (
+      group.is_required &&
+      group.selection_type === "single" &&
+      group.options[0]
+    ) {
       selection[group.id] = [group.options[0].id]
     }
   }
@@ -61,7 +71,8 @@ function ProductForm({
       const chosen = current[group.id] ?? []
       if (group.selection_type === "single") {
         // Tapping the chosen option again clears it unless the group is required.
-        const next = chosen[0] === option.id && !group.is_required ? [] : [option.id]
+        const next =
+          chosen[0] === option.id && !group.is_required ? [] : [option.id]
         return { ...current, [group.id]: next }
       }
       return {
@@ -91,14 +102,21 @@ function ProductForm({
     <div className="flex flex-col gap-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <SheetTitle className="font-display text-3xl">{product.name}</SheetTitle>
+          <SheetTitle className="font-display text-3xl">
+            {product.name}
+          </SheetTitle>
           {product.description && (
             <SheetDescription className="mt-1 text-sm text-muted-foreground">
               {product.description}
             </SheetDescription>
           )}
         </div>
-        <Button variant="ghost" size="icon" aria-label="Close" onClick={onClose}>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Close"
+          onClick={onClose}
+        >
           <XIcon />
         </Button>
       </div>
@@ -116,14 +134,15 @@ function ProductForm({
                   aria-pressed={selected}
                   onClick={() => toggle(group, option)}
                   className={cn(
-                    "h-10 touch-manipulation rounded-full border px-4 text-sm transition-colors",
+                    "h-11 touch-manipulation rounded-full border px-4 text-sm transition-[color,background-color,border-color,scale] duration-200 active:scale-95",
                     selected
                       ? "border-foreground bg-foreground text-background"
                       : "border-border hover:bg-muted"
                   )}
                 >
                   {option.name}
-                  {option.price_delta_cents > 0 && ` +${formatPrice(option.price_delta_cents)}`}
+                  {option.price_delta_cents > 0 &&
+                    ` +${formatPrice(option.price_delta_cents)}`}
                 </button>
               )
             })}
@@ -135,10 +154,11 @@ function ProductForm({
         <Stepper value={quantity} onChange={setQuantity} label={product.name} />
         <Button
           size="lg"
+          className="h-12 px-6 text-base active:scale-[0.97]"
           disabled={missingRequired}
           onClick={() => onAdd(product, selectedOptions, quantity)}
         >
-          Add · {formatPrice(unitCents * quantity)}
+          Add · <Price cents={unitCents * quantity} />
         </Button>
       </div>
     </div>
