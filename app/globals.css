@@ -125,9 +125,14 @@
   html {
     @apply font-sans;
     -webkit-tap-highlight-color: transparent;
+    touch-action: pan-x pan-y;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
   }
   body {
     @apply bg-background text-foreground;
+    touch-action: pan-x pan-y;
+    overscroll-behavior: none;
   }
   ::selection {
     background: rgb(166 107 72 / 0.25);
