@@ -140,6 +140,14 @@ export function ReceiptModal({
                 || | ||| || ||| | ||
               </div>
               <p>Thank you for visiting Kiwu Club!</p>
+              <a
+                href={`/status/${data.orderNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[11px] font-bold text-stone-800 hover:underline"
+              >
+                /status/{data.orderNumber}
+              </a>
               <p className="text-[9px] opacity-75">Bar & Kitchen Dispatch Slip</p>
             </div>
           </div>
@@ -154,11 +162,24 @@ export function ReceiptModal({
               Close
             </Button>
             <Button
+              asChild
+              variant="secondary"
+              className="flex-1 rounded-xl font-semibold"
+            >
+              <a
+                href={`/status/${data.orderNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Live Tracker
+              </a>
+            </Button>
+            <Button
               onClick={handlePrint}
               className="flex-1 rounded-xl gap-2 font-semibold shadow-lifted"
             >
               <Printer className="size-4" />
-              Print Receipt
+              Print
             </Button>
           </div>
         </motion.div>

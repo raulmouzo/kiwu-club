@@ -11,7 +11,24 @@ export const metadata: Metadata = {
   description: "Enter your order number to follow brew progress live.",
 }
 
-export default async function StatusLookupPage() {
+export default async function StatusLookupPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const params = await searchParams
+  const rawNumber =
+    params?.number ||
+    params?.order ||
+    params?.orderNumber ||
+    params?.id ||
+    (params ? Object.keys(params).find((k) => /^\d+$/.test(k)) : undefined)
+
+  const num = Array.isArray(rawNumber) ? rawNumber[0] : rawNumber
+  if (num && /^\d+$/.test(num.trim())) {
+    redirect(`/status/${num.trim()}`)
+  }
+
   async function searchOrder(formData: FormData) {
     "use server"
     const number = formData.get("orderNumber")?.toString().trim()
@@ -24,7 +41,7 @@ export default async function StatusLookupPage() {
     <main className="kiwu-light min-h-svh bg-background text-foreground">
       <div className="mx-auto flex min-h-svh max-w-md flex-col items-center justify-between p-6 sm:p-8">
         <header className="flex w-full items-center justify-between">
-          <Link href="/kiosk">
+          <Link href="/status">
             <Logo className="h-10 text-foreground transition-opacity hover:opacity-80" />
           </Link>
         </header>
