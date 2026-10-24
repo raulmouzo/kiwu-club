@@ -4,6 +4,7 @@ import { XIcon } from "@phosphor-icons/react"
 import { Printer } from "lucide-react"
 import { useState, useTransition } from "react"
 
+import Link from "next/link"
 import { Elapsed } from "./elapsed"
 import { ReceiptModal } from "./receipt-modal"
 import { HoldToConfirm } from "@/components/arc/hold-to-confirm/hold-to-confirm"
@@ -49,9 +50,15 @@ export function OrderCard({ order }: { order: ActiveOrder }) {
         <header className="flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <p className="font-display text-3xl leading-none">
+              <Link
+                href={`/status/${order.order_number}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Open live order tracker"
+                className="font-display text-3xl leading-none hover:text-primary hover:underline transition-colors"
+              >
                 #{order.order_number}
-              </p>
+              </Link>
               {isUrgent && (
                 <span className="rounded-full bg-rose-500/20 px-2 py-0.5 text-[10px] font-bold text-rose-600 uppercase">
                   Delayed

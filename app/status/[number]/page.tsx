@@ -33,12 +33,20 @@ export default async function OrderStatusPage({
     <main className="kiwu-light min-h-svh bg-background text-foreground">
       <div className="mx-auto flex min-h-svh max-w-lg flex-col justify-between p-6 sm:p-8">
         <header className="flex items-center justify-between">
-          <Link href="/kiosk">
+          <Link href="/status" title="Look up another order">
             <Logo className="h-10 text-foreground transition-opacity hover:opacity-80" />
           </Link>
-          <span className="rounded-full border border-border bg-card px-3.5 py-1 text-xs font-mono font-semibold tracking-wider text-muted-foreground uppercase">
-            Live Tracker
-          </span>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/status"
+              className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Other order
+            </Link>
+            <span className="rounded-full border border-border bg-card px-3.5 py-1 text-xs font-mono font-semibold tracking-wider text-muted-foreground uppercase">
+              Live Tracker
+            </span>
+          </div>
         </header>
 
         <StatusTracker orderNumber={orderNumber} initialOrder={initialOrder} />
