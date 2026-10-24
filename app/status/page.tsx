@@ -27,12 +27,6 @@ export default async function StatusLookupPage() {
           <Link href="/kiosk">
             <Logo className="h-10 text-foreground transition-opacity hover:opacity-80" />
           </Link>
-          <Link
-            href="/ready"
-            className="rounded-full border border-border bg-card px-3.5 py-1 text-xs font-semibold tracking-wider text-muted-foreground uppercase hover:bg-muted"
-          >
-            TV Board
-          </Link>
         </header>
 
         <div className="flex w-full flex-col items-center gap-6 rounded-[2.5rem] bg-card p-8 text-center shadow-soft">
