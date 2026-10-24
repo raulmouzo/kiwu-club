@@ -1,6 +1,7 @@
 "use client"
 
 import { XIcon } from "@phosphor-icons/react"
+import { AlertCircle, Flame, Leaf, Milk, Snowflake, Wheat } from "lucide-react"
 import { useState } from "react"
 
 import { Stepper } from "./controls"
@@ -109,6 +110,63 @@ function ProductForm({
             <SheetDescription className="mt-1 text-sm text-muted-foreground">
               {product.description}
             </SheetDescription>
+          )}
+
+          {/* Dietary tags */}
+          {product.dietary && product.dietary.length > 0 && (
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
+              {product.dietary.map((d) => (
+                <span
+                  key={d}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary capitalize"
+                >
+                  {d === "vegan" && (
+                    <>
+                      <Leaf className="size-3" />
+                      <span>Vegan</span>
+                    </>
+                  )}
+                  {d === "vegetarian" && (
+                    <span>Vegetarian</span>
+                  )}
+                  {d === "lactose_free" && (
+                    <>
+                      <Milk className="size-3" />
+                      <span>Lactose-free</span>
+                    </>
+                  )}
+                  {d === "gluten_free" && (
+                    <>
+                      <Wheat className="size-3" />
+                      <span>Gluten-free</span>
+                    </>
+                  )}
+                  {d === "cold" && (
+                    <>
+                      <Snowflake className="size-3" />
+                      <span>Cold</span>
+                    </>
+                  )}
+                  {d === "hot" && (
+                    <>
+                      <Flame className="size-3" />
+                      <span>Hot</span>
+                    </>
+                  )}
+                  {!["vegan", "vegetarian", "lactose_free", "gluten_free", "cold", "hot"].includes(d) && (
+                    <span>{d}</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Allergens warning */}
+          {product.allergens && product.allergens.length > 0 && (
+            <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-amber-700/90 dark:text-amber-400">
+              <AlertCircle className="size-3.5 shrink-0" />
+              <span>Allergens: {product.allergens.join(", ")}</span>
+            </p>
           )}
         </div>
         <Button

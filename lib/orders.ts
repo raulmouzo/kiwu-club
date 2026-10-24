@@ -9,6 +9,14 @@ export type ActiveOrder = {
   status: OrderStatus
   total_cents: number
   created_at: string
+  table_number?: number | null
+  pickup_at?: string | null
+  note?: string | null
+  tip_cents?: number
+  discount_cents?: number
+  discount_code?: string | null
+  payment_method?: string
+  phone?: string | null
   order_items: {
     id: number
     product_name: string
@@ -25,6 +33,7 @@ export async function getActiveOrders(): Promise<ActiveOrder[]> {
     .from("orders")
     .select(
       `id, order_number, customer_name, order_type, status, total_cents, created_at,
+       table_number, pickup_at, note, tip_cents, discount_cents, discount_code, payment_method, phone,
        order_items (id, product_name, quantity, order_item_options (id, option_name))`
     )
     .in("status", ["pending", "preparing", "ready"])

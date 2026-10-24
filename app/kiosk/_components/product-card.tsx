@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { Leaf } from "lucide-react"
 import { useMemo, type CSSProperties } from "react"
 
 import { patternFor } from "./patterns"
@@ -55,6 +56,12 @@ export function ProductCard({ product, active, onTap }: Props) {
       </div>
 
       <div className="pointer-events-none relative flex flex-col gap-[0.3em] p-[1.4em]">
+        {product.dietary && product.dietary.includes("vegan") && (
+          <span className="self-start inline-flex items-center gap-1 rounded-full bg-primary/15 px-2 py-0.5 text-[0.7em] font-medium tracking-wide uppercase text-primary">
+            <Leaf className="size-2.5" />
+            Vegan
+          </span>
+        )}
         <p className="font-display text-[1.7em] leading-tight">
           {product.name}
         </p>

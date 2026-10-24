@@ -72,7 +72,7 @@ export function Confirmation({
         <motion.p variants={rise} className="opacity-80">
           We will call you when it is ready.
         </motion.p>
-        <motion.div variants={rise}>
+        <motion.div variants={rise} className="flex flex-col items-center gap-3">
           <Button
             size="lg"
             variant="secondary"
@@ -81,6 +81,15 @@ export function Confirmation({
           >
             New order
           </Button>
+          <a
+            href={`/status/${orderNumber}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 flex items-center gap-2 rounded-full bg-primary-foreground/15 px-4 py-2 text-sm font-medium tracking-wide text-primary-foreground transition-colors hover:bg-primary-foreground/25"
+          >
+            <span>Track order on your phone</span>
+            <span>&rarr;</span>
+          </a>
         </motion.div>
       </motion.div>
 

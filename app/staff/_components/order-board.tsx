@@ -106,6 +106,8 @@ export function OrderBoard({ orders }: { orders: ActiveOrder[] }) {
   )
 }
 
+import { playOrderBell } from "@/lib/audio"
+
 // Raises a toast for the newest order that arrives after the board is first
 // shown; orders already there on load are not announced. The order stays in
 // state after the toast closes so its text holds during the exit.
@@ -119,7 +121,10 @@ function useArrivalToast(orders: ActiveOrder[]) {
   if (orders !== previous) {
     const seen = new Set(previous.map((order) => order.id))
     const fresh = orders.filter((order) => !seen.has(order.id)).at(-1)
-    if (fresh) setToast({ order: fresh, open: true })
+    if (fresh) {
+      playOrderBell()
+      setToast({ order: fresh, open: true })
+    }
     setPrevious(orders)
   }
 
