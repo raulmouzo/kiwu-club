@@ -2,7 +2,7 @@
 
 import { SignOutIcon } from "@phosphor-icons/react"
 import { MotionConfig } from "motion/react"
-import { useCallback, useState, useTransition } from "react"
+import { useCallback, useRef, useState, useTransition } from "react"
 
 import { ActionButton } from "@/components/action-button"
 import { Logo } from "@/components/brand"
@@ -31,6 +31,10 @@ export function Kiosk({
   const [from, setFrom] = useState<"left" | "right">("right")
   const [tappedId, setTappedId] = useState<number>()
   const [openProduct, setOpenProduct] = useState<Product | null>(null)
+  // The dialog's buttons sit over the drink's card. A second tap (a double tap,
+  // or the tablet's delayed click) lands on the card as soon as the dialog
+  // closes and would open it again, so openings are ignored for a moment.
+  const reopenLockedUntil = useRef(0)
 
   const cart = useCart()
   const [name, setName] = useState("")
@@ -60,13 +64,23 @@ export function Kiosk({
     setCategoryId(id)
   }
 
+  function openDialog(product: Product) {
+    if (Date.now() < reopenLockedUntil.current) return
+    setOpenProduct(product)
+  }
+
+  function closeDialog() {
+    reopenLockedUntil.current = Date.now() + 600
+    setOpenProduct(null)
+  }
+
   function addToOrder(
     product: Product,
     options: SelectedOption[],
     quantity: number
   ) {
     cart.add(product, options, quantity)
-    setOpenProduct(null)
+    closeDialog()
   }
 
   function placeOrder() {
@@ -172,7 +186,7 @@ export function Kiosk({
                 products={category?.products ?? []}
                 activeId={activeId}
                 onActivate={setTappedId}
-                onOpen={setOpenProduct}
+                onOpen={openDialog}
               />
             </div>
 
@@ -202,7 +216,7 @@ export function Kiosk({
 
         <ProductDialog
           product={openProduct}
-          onClose={() => setOpenProduct(null)}
+          onClose={closeDialog}
           onAdd={addToOrder}
         />
       </main>

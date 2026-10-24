@@ -181,10 +181,6 @@ begin
     raise exception 'Order must have between 1 and 30 items';
   end if;
 
-  if p_order_type = 'dine_in' and p_table_number is null then
-    raise exception 'Dine in needs a table';
-  end if;
-
   -- Se validan y valoran todas las líneas antes de crear nada.
   for v_item in select * from jsonb_array_elements(p_items) loop
     v_quantity := (v_item ->> 'quantity')::int;
