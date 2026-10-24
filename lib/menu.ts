@@ -25,6 +25,9 @@ export type Product = {
   image_url: string | null
   is_available: boolean
   sort_order: number
+  allergens?: string[]
+  dietary?: string[]
+  prep_seconds?: number
   groups: Group[]
 }
 
@@ -36,6 +39,9 @@ export type Category = {
 
 type RawGroup = Omit<Group, "options"> & { modifier_options: Option[] }
 type RawProduct = Omit<Product, "groups"> & {
+  allergens: string[] | null
+  dietary: string[] | null
+  prep_seconds: number | null
   product_modifier_groups: { modifier_groups: RawGroup | null }[]
 }
 type RawCategory = {
@@ -57,6 +63,7 @@ export async function getMenu(): Promise<Category[]> {
       `id, name, sort_order,
        products (
          id, name, description, price_cents, image_url, is_available, sort_order,
+         allergens, dietary, prep_seconds,
          product_modifier_groups (
            modifier_groups (
              id, name, selection_type, is_required, sort_order,
@@ -80,6 +87,9 @@ export async function getMenu(): Promise<Category[]> {
       image_url: product.image_url,
       is_available: product.is_available,
       sort_order: product.sort_order,
+      allergens: product.allergens ?? [],
+      dietary: product.dietary ?? [],
+      prep_seconds: product.prep_seconds ?? 90,
       groups: product.product_modifier_groups
         .flatMap((link) => (link.modifier_groups ? [link.modifier_groups] : []))
         .sort(bySortOrder)

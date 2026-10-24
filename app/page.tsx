@@ -9,6 +9,7 @@ export default async function Page() {
 
   if (role === "kiosk") redirect("/welcome")
   if (role === "staff") redirect("/staff")
+  if (role === "customer") redirect("/status")
 
   return (
     <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
