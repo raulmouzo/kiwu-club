@@ -50,23 +50,23 @@ export function ReadyBoardScreen({
 
   return (
     <div className="grid flex-1 items-start gap-8 lg:grid-cols-2">
-      {/* Column: Preparando */}
+      {/* Column: Preparing */}
       <section className="flex flex-col gap-6 rounded-3xl border border-stone-800 bg-stone-900/60 p-8 shadow-xl">
         <div className="flex items-center justify-between border-b border-stone-800 pb-4">
           <div className="flex items-center gap-3">
             <span className="size-3.5 rounded-full bg-amber-500 animate-pulse" />
             <h2 className="text-2xl font-bold tracking-tight text-amber-400 uppercase">
-              Preparando
+              Preparing
             </h2>
           </div>
           <span className="font-mono text-sm text-stone-400">
-            {preparing.length} {preparing.length === 1 ? "pedido" : "pedidos"}
+            {preparing.length} {preparing.length === 1 ? "order" : "orders"}
           </span>
         </div>
 
         {preparing.length === 0 ? (
           <div className="py-20 text-center text-stone-500">
-            No hay comandas pendientes
+            No orders pending
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -93,23 +93,23 @@ export function ReadyBoardScreen({
         )}
       </section>
 
-      {/* Column: ¡Listo! */}
+      {/* Column: Ready to Collect */}
       <section className="flex flex-col gap-6 rounded-3xl border border-emerald-900/50 bg-emerald-950/20 p-8 shadow-2xl">
         <div className="flex items-center justify-between border-b border-emerald-900/60 pb-4">
           <div className="flex items-center gap-3">
             <span className="size-3.5 rounded-full bg-emerald-400 animate-ping" />
             <h2 className="text-2xl font-bold tracking-tight text-emerald-400 uppercase">
-              ¡Listo para recoger!
+              Ready to collect
             </h2>
           </div>
           <span className="font-mono text-sm text-emerald-300">
-            {ready.length} listos
+            {ready.length} ready
           </span>
         </div>
 
         {ready.length === 0 ? (
           <div className="py-20 text-center text-stone-500">
-            Los pedidos listos aparecerán aquí
+            Ready orders will appear here
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-2">
@@ -131,7 +131,7 @@ export function ReadyBoardScreen({
                   </span>
                   {order.table_number && (
                     <span className="mt-1 text-xs font-semibold text-emerald-400">
-                      Mesa {order.table_number}
+                      Table {order.table_number}
                     </span>
                   )}
                 </motion.div>

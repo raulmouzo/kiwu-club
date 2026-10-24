@@ -6,8 +6,8 @@ import { getActiveOrders } from "@/lib/orders"
 import { ReadyBoardScreen } from "./_components/ready-board-screen"
 
 export const metadata: Metadata = {
-  title: "Pantalla de comandas · Kiwu Club",
-  description: "Pantalla pública para el mostrador de recogida.",
+  title: "Ready Board · Kiwu Club",
+  description: "Public pick-up counter display board.",
 }
 
 export default async function ReadyPage() {
@@ -20,7 +20,7 @@ export default async function ReadyPage() {
           <div className="flex items-center gap-4">
             <Logo className="h-12 text-stone-100" />
             <span className="rounded-full bg-stone-800 px-3.5 py-1 text-xs font-mono tracking-widest text-stone-400 uppercase">
-              Pantalla de recogida
+              Pick-up counter board
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -42,10 +42,10 @@ export default async function ReadyPage() {
         <ReadyBoardScreen initialOrders={activeOrders} />
 
         <footer className="flex items-center justify-between border-t border-stone-800 pt-6 text-xs text-stone-400">
-          <span>Kiwu Club · Café de especialidad recién tostado</span>
+          <span>Kiwu Club · Specialty coffee freshly roasted</span>
           <span className="flex items-center gap-2">
             <span className="size-2 animate-ping rounded-full bg-emerald-500" />
-            Actualización continua
+            Live updates
           </span>
         </footer>
       </div>

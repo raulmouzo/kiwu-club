@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export const metadata: Metadata = {
-  title: "Seguimiento de comanda · Kiwu Club",
-  description: "Introduce tu número de pedido para seguir su preparación en directo.",
+  title: "Order Tracker · Kiwu Club",
+  description: "Enter your order number to follow brew progress live.",
 }
 
 export default async function StatusLookupPage() {
@@ -31,7 +31,7 @@ export default async function StatusLookupPage() {
             href="/ready"
             className="rounded-full border border-border bg-card px-3.5 py-1 text-xs font-semibold tracking-wider text-muted-foreground uppercase hover:bg-muted"
           >
-            Pantalla TV
+            TV Board
           </Link>
         </header>
 
@@ -40,10 +40,10 @@ export default async function StatusLookupPage() {
 
           <div className="flex flex-col gap-1.5">
             <h1 className="font-display text-3xl font-bold tracking-tight">
-              Sigue tu comanda
+              Track your order
             </h1>
             <p className="text-sm text-muted-foreground">
-              Introduce el número de tu ticket para ver si tu café está en preparación o listo para recoger.
+              Enter your order number from your receipt to check if your coffee is brewing or ready to collect.
             </p>
           </div>
 
@@ -53,17 +53,17 @@ export default async function StatusLookupPage() {
               type="number"
               min={1}
               required
-              placeholder="Ej. 14"
+              placeholder="e.g. 14"
               className="h-14 rounded-2xl bg-background text-center font-display text-2xl font-bold"
             />
             <Button size="lg" type="submit" className="h-12 rounded-xl text-base font-semibold">
-              Ver estado en directo
+              Track order live
             </Button>
           </form>
         </div>
 
         <footer className="py-4 text-center text-xs text-muted-foreground">
-          Kiwu Club · Café de especialidad
+          Kiwu Club · Specialty Coffee
         </footer>
       </div>
     </main>

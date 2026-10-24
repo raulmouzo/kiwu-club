@@ -13,8 +13,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { number } = await params
   return {
-    title: `Pedido #${number} · Estado en directo · Kiwu Club`,
-    description: `Sigue en tiempo real la preparación de tu café #${number} en Kiwu Club.`,
+    title: `Order #${number} · Live tracker · Kiwu Club`,
+    description: `Track your order #${number} in real time at Kiwu Club.`,
   }
 }
 
@@ -44,9 +44,9 @@ export default async function OrderStatusPage({
         <StatusTracker orderNumber={orderNumber} initialOrder={initialOrder} />
 
         <footer className="py-4 text-center text-xs text-muted-foreground">
-          <p>Kiwu Club · Café de especialidad</p>
+          <p>Kiwu Club · Specialty Coffee</p>
           <p className="mt-0.5 opacity-70">
-            Actualizado en tiempo real. Conserva esta pantalla.
+            Updated in real time. Keep this screen open.
           </p>
         </footer>
       </div>

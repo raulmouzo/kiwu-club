@@ -1,16 +1,16 @@
 "use client"
 
 import {
-  CheckCircle2Icon,
-  ChefHatIcon,
-  ClockIcon,
-  CoffeeIcon,
-  PackageCheckIcon,
+  CheckCircle2,
+  Clock,
+  Coffee,
+  MapPin,
+  PackageCheck,
 } from "lucide-react"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 
-import { CoffeeCup, DogSitting } from "@/components/brand"
+import { DogSitting } from "@/components/brand"
 import {
   getOrderStatusAction,
   type PublicOrderStatus,
@@ -21,21 +21,21 @@ import { cn } from "@/lib/utils"
 const STEPS = [
   {
     key: "pending",
-    title: "En cola",
-    subtitle: "Comanda recibida en barra",
-    icon: ClockIcon,
+    title: "In queue",
+    subtitle: "Order received at the bar",
+    icon: Clock,
   },
   {
     key: "preparing",
-    title: "Preparando",
-    subtitle: "Moliendo y extrayendo tu café",
-    icon: CoffeeIcon,
+    title: "Preparing",
+    subtitle: "Grinding and brewing your coffee",
+    icon: Coffee,
   },
   {
     key: "ready",
-    title: "Listo",
-    subtitle: "Pasa a recoger al mostrador",
-    icon: PackageCheckIcon,
+    title: "Ready",
+    subtitle: "Pick up at the counter",
+    icon: PackageCheck,
   },
 ]
 
@@ -47,7 +47,6 @@ export function StatusTracker({
   initialOrder: PublicOrderStatus | null
 }) {
   const [order, setOrder] = useState<PublicOrderStatus | null>(initialOrder)
-  const [lastCheck, setLastCheck] = useState<Date>(new Date())
 
   // Real-time polling every 3.5 seconds
   useEffect(() => {
@@ -57,7 +56,6 @@ export function StatusTracker({
         const fresh = await getOrderStatusAction(orderNumber)
         if (active && fresh) {
           setOrder(fresh)
-          setLastCheck(new Date())
         }
       } catch {
         // Ignore network drops
@@ -75,10 +73,10 @@ export function StatusTracker({
       <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
         <DogSitting className="h-40 text-muted-foreground/40" />
         <h2 className="font-display text-2xl font-semibold">
-          Pedido #{orderNumber} no encontrado
+          Order #{orderNumber} not found
         </h2>
         <p className="text-sm text-muted-foreground">
-          Comprueba el número en tu ticket o consulta a nuestro equipo en barra.
+          Check the number on your ticket or ask our baristas at the counter.
         </p>
       </div>
     )
@@ -102,26 +100,27 @@ export function StatusTracker({
         className="flex flex-col items-center gap-2 rounded-[2.5rem] bg-card p-6 text-center shadow-soft"
       >
         <span className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-          Tu número de comanda
+          Your order number
         </span>
         <h1 className="font-display text-7xl font-bold tracking-tight text-foreground sm:text-8xl">
           #{order.order_number}
         </h1>
         <p className="text-lg font-medium text-foreground/90">
-          Hola, <span className="font-semibold text-primary">{order.customer_name}</span>
+          Hello, <span className="font-semibold text-primary">{order.customer_name}</span>
         </p>
 
         {order.table_number && (
           <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-            📍 Mesa {order.table_number}
+            <MapPin className="size-3.5" />
+            Table {order.table_number}
           </span>
         )}
 
         {order.status === "pending" && order.queue_ahead > 0 && (
           <p className="text-xs text-muted-foreground">
             {order.queue_ahead === 1
-              ? "1 pedido por delante"
-              : `${order.queue_ahead} pedidos por delante`}
+              ? "1 order ahead of yours"
+              : `${order.queue_ahead} orders ahead of yours`}
           </p>
         )}
       </motion.div>
@@ -130,11 +129,11 @@ export function StatusTracker({
       <div className="flex flex-col gap-4 rounded-[2.5rem] bg-card p-6 shadow-soft">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Estado de preparación
+            Brew status
           </span>
           <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <span className="size-2 animate-ping rounded-full bg-success" />
-            En directo
+            Live
           </span>
         </div>
 
@@ -169,7 +168,7 @@ export function StatusTracker({
                   )}
                 >
                   {isDone ? (
-                    <CheckCircle2Icon className="size-5" />
+                    <CheckCircle2 className="size-5" />
                   ) : (
                     <Icon className={cn("size-5", isCurrent && "animate-pulse")} />
                   )}
@@ -192,7 +191,7 @@ export function StatusTracker({
                     </p>
                     {isCurrent && (
                       <span className="rounded-full bg-primary/15 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
-                        Actual
+                        Current
                       </span>
                     )}
                   </div>
@@ -203,20 +202,20 @@ export function StatusTracker({
           })}
         </div>
 
-        {/* Big Alert when Ready */}
+        {/* Alert when Ready */}
         {order.status === "ready" && (
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             className="flex items-center gap-3 rounded-2xl bg-success/15 p-4 text-success-foreground"
           >
-            <div className="flex size-10 items-center justify-center rounded-full bg-success text-success-foreground">
-              <PackageCheckIcon className="size-6" />
+            <div className="flex size-10 items-center justify-center rounded-full bg-success text-success-foreground shrink-0">
+              <PackageCheck className="size-6" />
             </div>
             <div>
-              <p className="text-sm font-bold">¡Tu café está listo para recoger!</p>
+              <p className="text-sm font-bold">Your coffee is ready to collect!</p>
               <p className="text-xs opacity-85">
-                Acércate a la barra y muestra tu número #{order.order_number}.
+                Head to the pick-up counter and show order #{order.order_number}.
               </p>
             </div>
           </motion.div>
@@ -227,7 +226,7 @@ export function StatusTracker({
       <div className="flex flex-col gap-3 rounded-[2.5rem] bg-card p-6 shadow-soft">
         <div className="flex items-center justify-between border-b border-border pb-2.5">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Productos en tu pedido
+            Items in your order
           </span>
           <span className="font-mono text-xs font-semibold text-foreground">
             {formatPrice(order.total_cents)}
