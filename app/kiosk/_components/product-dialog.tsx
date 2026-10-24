@@ -180,8 +180,15 @@ function ProductForm({
       </div>
 
       {product.groups.map((group) => (
-        <fieldset key={group.id} className="flex flex-col gap-2">
-          <legend className="mb-1 text-sm font-medium">{group.name}</legend>
+        <div
+          key={group.id}
+          role="group"
+          aria-labelledby={`group-${group.id}`}
+          className="flex flex-col gap-2"
+        >
+          <p id={`group-${group.id}`} className="mb-1 text-sm font-medium">
+            {group.name}
+          </p>
           <div className="flex flex-wrap gap-2">
             {group.options.map((option) => {
               const selected = selection[group.id]?.includes(option.id) ?? false
@@ -205,7 +212,7 @@ function ProductForm({
               )
             })}
           </div>
-        </fieldset>
+        </div>
       ))}
 
       <div className="flex items-center justify-between gap-4 pt-2">
